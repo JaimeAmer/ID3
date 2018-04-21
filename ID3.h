@@ -3,37 +3,21 @@
 
 #include <cmath>
 #include <utility>
+#include <unordered_map>
 #include "TablasDatos.h"
+#include "Nodo.h"
 #include "Arbol.h"
 
 using namespace std;
-using Par = pair<string, TablasDatos::Nodo>;
 
 class ID3 {
 public:
-	class Comparador {
-	public:
-		bool operator()(map<string, TablasDatos::Nodo> a, map<string, TablasDatos::Nodo> b) {
-			return calcularMerito(a) < calcularMerito(b);
-		}
-
-	private:
-		float calcularMerito(map<string, TablasDatos::Nodo> key) {
-			float merito = 0.0;
-			for (auto values = key.cbegin(); values != key.cend(); values++) {
-				merito += values->second.r * values->second.infor();
-			}
-			return merito;
-		}
-	};
 
 	ID3(list<string> listaAtributos, list<string> listaEjemplos) : _listaAtributos(listaAtributos), _listaEjemplos(listaEjemplos) {
 		ejecutarID3();
 	}
 
 private:
-
-	
 
 
 	Arbol ejecutarID3() {
@@ -47,18 +31,18 @@ private:
 			return Arbol("-");
 
 		if (!_listaAtributos.empty()) {
-			priority_queue<pair<string, TablasDatos::Nodo>, Comparador> pq;
-			for (auto key = _datos.begin(); key != _datos.end(); key++) {
-				for (auto values = _datos[key->first].begin(); values != _datos[key->first].end(); values++) {
+			priority_queue<unordered_map<string, Nodo>, vector<unordered_map<string, Nodo>>, Nodo::Comparador> pq;
+			for (auto key = _datos.cbegin(); key != _datos.cend(); key++) {
+				for (auto values = _datos[key->first].cbegin(); values != _datos[key->first].cend(); values++) {
 
-					pq.push(values->second);
+					//pq.push(values);
 				}
 			}
-			Par r = pq.top();
+			unordered_map<string, Nodo> r = pq.top();
 
-			Arbol a(r.first, r.second);
+			//Arbol a(r., r.second);
 
-			_raiz = a;
+			//_raiz = a;
 			_posActual = &_raiz;
 
 
@@ -78,10 +62,10 @@ private:
 		return true;
 	}
 
-	float calcularMerito(map<string, TablasDatos::Nodo> key) {
+	float calcularMerito(unordered_map<string, Nodo> key) {
 		float merito = 0.0;
 		for (auto values = key.cbegin(); values != key.cend(); values++) {
-			merito += values->second.r * values->second.infor();
+			merito += values->second.r() * values->second.infor();
 		}
 		return merito;
 	}
@@ -91,7 +75,7 @@ private:
 	Arbol _raiz;
 	Arbol* _posActual;
 
-	map<string, map<string, TablasDatos::Nodo> > _datos;
+	unordered_map<string, unordered_map<string, Nodo> > _datos;
 
 };
 

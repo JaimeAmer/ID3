@@ -8,12 +8,13 @@ using namespace std;
 
 
 int main() {
-	string rutaFicheroAtributos;
-	string rutaFicheroDatos;
+	string rutaFicheroAtributos = "AtributosJuego2.txt";
+	string rutaFicheroEjemplos = "Juego2.txt";
 
-	TablasDatos datos(rutaFicheroAtributos, rutaFicheroDatos);
+	TablasDatos datos;
+	datos.lecturaDatos(rutaFicheroAtributos, rutaFicheroEjemplos);
 	
-	ID3(datos.listaAtributos(), datos.listaEjemplos())
+	//ID3(datos.listaAtributos(), datos.listaEjemplos());
 
 	return 0;
 }
