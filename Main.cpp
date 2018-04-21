@@ -14,7 +14,9 @@ int main() {
 	TablasDatos datos;
 	datos.lecturaDatos(rutaFicheroAtributos, rutaFicheroEjemplos);
 	
-	//ID3(datos.listaAtributos(), datos.listaEjemplos());
+	ID3 algoritmo(datos);
+
+	algoritmo.mostrarSolucion();
 
 	return 0;
 }

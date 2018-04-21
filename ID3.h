@@ -14,13 +14,22 @@ class ID3 {
 public:
 
 	ID3(list<string> listaAtributos, list<string> listaEjemplos) : _listaAtributos(listaAtributos), _listaEjemplos(listaEjemplos) {
-		ejecutarID3();
+		_raiz = ejecutarID3();
+	}
+
+	ID3(TablasDatos datos) : _datos(datos.getDatos()), _listaAtributos(datos.listaAtributos()){
+		_raiz = ejecutarID3();
+	}
+
+	void mostrarSolucion() {
+
 	}
 
 private:
 
 
 	Arbol ejecutarID3() {
+		/*
 		if (_listaEjemplos.empty())
 			return Arbol("");
 
@@ -29,18 +38,18 @@ private:
 
 		if (comprobar("-"))
 			return Arbol("-");
-
+			*/
 		if (!_listaAtributos.empty()) {
-			priority_queue<unordered_map<string, Nodo>, vector<unordered_map<string, Nodo>>, Nodo::Comparador> pq;
+			priority_queue<pair<string, unordered_map<string, Nodo> >, vector<pair<string, unordered_map<string, Nodo> > >, Nodo::Comparador> pq;
 			for (auto key = _datos.cbegin(); key != _datos.cend(); key++) {
-				for (auto values = _datos[key->first].cbegin(); values != _datos[key->first].cend(); values++) {
-
-					//pq.push(values);
-				}
+				pq.push(pair<string, unordered_map<string, Nodo> >(key->first, key->second));
 			}
-			unordered_map<string, Nodo> r = pq.top();
-
-			//Arbol a(r., r.second);
+			pair<string, unordered_map<string, Nodo> > r = pq.top();
+			
+			Arbol elem(r.first);
+			for(auto values=r.second.cbegin(); values != r.second.cend(); values++){
+				elem.addHijo(values->first, &ejecutarID3());
+			}
 
 			//_raiz = a;
 			_posActual = &_raiz;
@@ -61,7 +70,7 @@ private:
 		}
 		return true;
 	}
-
+	/*
 	float calcularMerito(unordered_map<string, Nodo> key) {
 		float merito = 0.0;
 		for (auto values = key.cbegin(); values != key.cend(); values++) {
@@ -69,6 +78,7 @@ private:
 		}
 		return merito;
 	}
+	*/
 
 	list<string> _listaAtributos;
 	list<string> _listaEjemplos;
